@@ -118,6 +118,33 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"main.js":[function(require,module,exports) {
+var $siteList = $('.siteList');
+var $lastLi = $siteList.find('li.last'); //一进入当前页面的时候获取x值，
+
+var x = localStorage.getItem('x');
+var xObject = JSON.parse(x); //JSON.parse把字符串x变成对象xObject
+
+console.log('x:' + x);
+console.log('xObject:' + xObject); //初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
+
+var hashMap = xObject || [//声明一个全局变量
+{
+  logo: 'A',
+  logoType: 'text',
+  url: 'https://www.acfun.cn'
+}, {
+  logo: './images/1.png',
+  logoType: 'image',
+  url: 'https://bilibili.com'
+}];
+
+var render = function render() {
+  hashMap.forEach(function (node) {
+    var $li = $("\n                <li>\n                    <a href=\"".concat(node.url, "\" >\n                        <div class=\"site\">\n                            <div class=\"logo\">").concat(node.logo[0], "</div>\n                            <div class=\"link\">").concat(node.url, "</div>\n                        </div>\n                    </a>\n                </li>\n        ")).insertBefore($lastLi);
+  });
+};
+
+render();
 $('.addButton').on('click', function () {
   console.log(1);
   var url = window.prompt("你想干啥？");
@@ -126,11 +153,29 @@ $('.addButton').on('click', function () {
     url = 'https://' + url;
   }
 
-  console.log(url);
-  var $siteList = $('.siteList');
-  var $lastLi = $siteList.find('li.last');
-  var $li = $("<li>\n    <a href=\"".concat(url, "\">\n                    <div class=\"site\">\n                        <div class=\"logo\">").concat(url[0], "</div>\n                        <div class=\"link\">").concat(url, "</div>\n                    </div>\n                </a>\n    </li>")).insertBefore($lastLi);
-});
+  hashMap.push({
+    logo: url[0],
+    logoType: 'text',
+    url: url
+  });
+  $siteList.find('li:not(.last)').remove();
+  render();
+}); //关闭页面的时候把当前的hashMap存到x里面
+
+window.onbeforeunload = function () {
+  console.log("\u9875\u9762\u8981\u5173\u95ED\u4E86"); //把对象变成字符串用JSON.stringfy()
+
+  var string = JSON.stringify(hashMap);
+  /*查看下面四个值要勾选preserve log*/
+  // console.log(hashMap)
+  // console.log(typeof hashMap) //object
+  // console.log(string)
+  // console.log(typeof string) //类型是string
+  //产看localStorage的值，要看控制台中Application
+  //中的Storage中的local storage，对应x和string
+
+  localStorage.setItem('x', string);
+};
 },{}],"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -159,7 +204,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63429" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53904" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
