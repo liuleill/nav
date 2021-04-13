@@ -8,8 +8,15 @@ console.log('xObject:' + xObject)
 //初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
 const hashMap = xObject || [//声明一个全局变量
     {logo:'A',logoType:'text',url:'https://www.acfun.cn'},
-    {logo:'./images/1.png',logoType:'image',url:'https://bilibili.com'},
+    {logo:'B',logoType:'image',url:'https://bilibili.com'},
 ]
+
+const simplifyUrl = (url) =>{
+    return url.replace('https://','')
+           .replace('http://','')
+           .replace('www.','')
+           .replace(/\/.*/,'')
+}
 
 const render = () => {
     hashMap.forEach(node=>{
@@ -17,8 +24,8 @@ const render = () => {
                 <li>
                     <a href="${node.url}" >
                         <div class="site">
-                            <div class="logo">${node.logo[0]}</div>
-                            <div class="link">${node.url}</div>
+                            <div class="logo">${simplifyUrl(node.url)[0].toUpperCase()}</div>
+                            <div class="link">${simplifyUrl(node.url)}</div>
                         </div>
                     </a>
                 </li>
@@ -35,7 +42,7 @@ $('.addButton').on('click',()=>{
         url = 'https://' + url
     }
     hashMap.push({
-        logo:url[0],
+        logo:simplifyUrl(url)[0].toUpperCase(),
         logoType:'text',
         url:url
     })

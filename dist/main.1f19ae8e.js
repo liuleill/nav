@@ -133,14 +133,18 @@ var hashMap = xObject || [//声明一个全局变量
   logoType: 'text',
   url: 'https://www.acfun.cn'
 }, {
-  logo: './images/1.png',
+  logo: 'B',
   logoType: 'image',
   url: 'https://bilibili.com'
 }];
 
+var simplifyUrl = function simplifyUrl(url) {
+  return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, '');
+};
+
 var render = function render() {
   hashMap.forEach(function (node) {
-    var $li = $("\n                <li>\n                    <a href=\"".concat(node.url, "\" >\n                        <div class=\"site\">\n                            <div class=\"logo\">").concat(node.logo[0], "</div>\n                            <div class=\"link\">").concat(node.url, "</div>\n                        </div>\n                    </a>\n                </li>\n        ")).insertBefore($lastLi);
+    var $li = $("\n                <li>\n                    <a href=\"".concat(node.url, "\" >\n                        <div class=\"site\">\n                            <div class=\"logo\">").concat(simplifyUrl(node.url)[0].toUpperCase(), "</div>\n                            <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n                        </div>\n                    </a>\n                </li>\n        ")).insertBefore($lastLi);
   });
 };
 
@@ -154,7 +158,7 @@ $('.addButton').on('click', function () {
   }
 
   hashMap.push({
-    logo: url[0],
+    logo: simplifyUrl(url)[0].toUpperCase(),
     logoType: 'text',
     url: url
   });
