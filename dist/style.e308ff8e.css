@@ -24,9 +24,26 @@ body{
     margin: 20px;
     
 }
+@media (min-width:500px){
+    .globalHeader{
+        margin:60px 0;
+    }
+}
 .searchForm{
     display: flex;
     justify-content: space-between;
+}
+@media (min-width:500px){
+    .searchForm{
+        /* PC端的样式 */
+        max-width: 400px;
+        margin-left:auto;/*使PC端居中*/
+        margin-right:auto;
+}
+@media (max-width:500px){
+    .searchForm{
+        background-color: blue;
+    }
 }
 .searchForm > input{
     width: 100%;
@@ -47,19 +64,26 @@ body{
 }
 
 .globalMain{
-
+    max-width: 900px;
+    margin-right:auto;
+    margin-left:auto;
 }
 
 .siteList{
-    border:1px solid black;
     margin:20px;
     display:flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    border:1px solid red;
+}
+@media (min-width:500px) {
+    .siteList{
+        /* 采用负margin ,实现平均布局*/
+        margin-left: 0;
+        margin-right: -25px;
+    }
 }
 .siteList>li{
     margin-bottom: 10px;
+    margin-right: 25px;
 }
 .siteList .site{
     width:160px;
