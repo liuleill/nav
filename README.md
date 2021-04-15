@@ -1,5 +1,5 @@
 ### 一个前端的导航项目
-#### 技术栈：html，css，js，jQuery，hashMap
+#### 技术栈：html，css，js，jQuery，hashMap,使用Iconfont库里面的图标，本项目涉及了俩图标都是使用iconfont里面的图标
 ##### 目的：主要把自己平时使用的几个网站放在一起，方便使用，主要供给自己使用，后面会不断进行维护，迭代
 
 #### 1.使用hashMap和localStrage，保证用户存储的数据不会丢失
