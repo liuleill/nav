@@ -96,6 +96,7 @@ body{
     border-radius: 5px;
     padding:20px 0;
     position: relative;
+    cursor:pointer;
 }
 .siteList .site > .logo{
     width:64px;
@@ -115,6 +116,7 @@ body{
     right:5px;
     top:5px;
     display:none;
+    cursor: default;
 }
 
 .siteList .site:hover > .close{
