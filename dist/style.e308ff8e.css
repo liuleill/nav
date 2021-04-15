@@ -114,6 +114,11 @@ body{
     position: absolute;
     right:5px;
     top:5px;
+    display:none;
+}
+
+.siteList .site:hover > .close{
+    display: block;
 }
 
 .siteList .addButton{
