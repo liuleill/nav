@@ -26,7 +26,7 @@ const render = () => {
                         <div class="link">${simplifyUrl(node.url)}</div>
                         <div class="close">
                             <svg class="icon" aria-hidden="true">
-                                <use xlink:href="#icon-CloseSquare"></use>
+                                <use xlink:href="#icon-close"></use>
                             </svg>
                         </div>
                     </div>
@@ -48,8 +48,7 @@ const render = () => {
 render()
 
 $('.addButton').on('click',()=>{
-    console.log(1)
-    let url=window.prompt("你想干啥？")
+    let url=window.prompt("请输入输入您想添加的网址,比如：baidu.com")
     if(url.indexOf('https')!==0){
         url = 'https://' + url
     }

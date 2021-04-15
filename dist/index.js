@@ -117,84 +117,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"main.js":[function(require,module,exports) {
-var $siteList = $('.siteList');
-var $lastLi = $siteList.find('li.last'); //一进入当前页面的时候获取x值，
+})({"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-var x = localStorage.getItem('x');
-var xObject = JSON.parse(x); //JSON.parse把字符串x变成对象xObject
-//初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
-
-var hashMap = xObject || [//声明一个全局变量
-{
-  logo: 'A',
-  url: 'https://www.acfun.cn'
-}, {
-  logo: 'B',
-  url: 'https://bilibili.com'
-}];
-
-var simplifyUrl = function simplifyUrl(url) {
-  return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, '');
-};
-
-var render = function render() {
-  $siteList.find('li:not(.last)').remove();
-  hashMap.forEach(function (node, index) {
-    var $li = $("\n                <li>\n                    <div class=\"site\">\n                        <div class=\"logo\">".concat(node.logo, "</div>\n                        <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n                        <div class=\"close\">\n                            <svg class=\"icon\" aria-hidden=\"true\">\n                                <use xlink:href=\"#icon-close\"></use>\n                            </svg>\n                        </div>\n                    </div>\n                </li>\n        ")).insertBefore($lastLi);
-    $li.on('click', function () {
-      window.open(node.url);
-    });
-    $li.on('click', '.close', function (e) {
-      e.stopPropagation(); //阻止冒泡
-
-      hashMap.splice(index, 1); //删掉
-
-      render(); //重新渲染，即删完需要重新渲染
-    });
-  });
-};
-
-render();
-$('.addButton').on('click', function () {
-  var url = window.prompt("请输入输入您想添加的网址,比如：baidu.com");
-
-  if (url.indexOf('https') !== 0) {
-    url = 'https://' + url;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
 
-  hashMap.push({
-    logo: simplifyUrl(url)[0].toUpperCase(),
-    url: url
-  });
-  $siteList.find('li:not(.last)').remove();
-  render();
-}); //关闭页面的时候把当前的hashMap存到x里面
+  return bundleURL;
+}
 
-window.onbeforeunload = function () {
-  //把对象变成字符串用JSON.stringfy()
-  var string = JSON.stringify(hashMap);
-  /*查看下面四个值要勾选preserve log*/
-  // console.log(hashMap)
-  // console.log(typeof hashMap) //object
-  // console.log(string)
-  // console.log(typeof string) //类型是string
-  //产看localStorage的值，要看控制台中Application
-  //中的Storage中的local storage，对应x和string
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
-  localStorage.setItem('x', string);
-};
-
-$(document).on('keypress', function (e) {
-  var key = e.key;
-
-  for (var i = 0; i < hashMap.length; i++) {
-    if (hashMap[i].logo.toLowerCase() === key) {
-      window.open(hashMap[i].url);
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
-});
-},{}],"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js"}],"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -397,5 +387,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.js.map
+},{}]},{},["../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map
