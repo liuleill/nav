@@ -123,18 +123,14 @@ var $lastLi = $siteList.find('li.last'); //一进入当前页面的时候获取x
 
 var x = localStorage.getItem('x');
 var xObject = JSON.parse(x); //JSON.parse把字符串x变成对象xObject
-
-console.log('x:' + x);
-console.log('xObject:' + xObject); //初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
+//初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
 
 var hashMap = xObject || [//声明一个全局变量
 {
   logo: 'A',
-  logoType: 'text',
   url: 'https://www.acfun.cn'
 }, {
   logo: 'B',
-  logoType: 'image',
   url: 'https://bilibili.com'
 }];
 
@@ -143,8 +139,19 @@ var simplifyUrl = function simplifyUrl(url) {
 };
 
 var render = function render() {
-  hashMap.forEach(function (node) {
-    var $li = $("\n                <li>\n                    <a href=\"".concat(node.url, "\" >\n                        <div class=\"site\">\n                            <div class=\"logo\">").concat(simplifyUrl(node.url)[0].toUpperCase(), "</div>\n                            <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n                        </div>\n                    </a>\n                </li>\n        ")).insertBefore($lastLi);
+  $siteList.find('li:not(.last)').remove();
+  hashMap.forEach(function (node, index) {
+    var $li = $("\n                <li>\n                    <div class=\"site\">\n                        <div class=\"logo\">".concat(node.logo, "</div>\n                        <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n                        <div class=\"close\">\n                            <svg class=\"icon\" aria-hidden=\"true\">\n                                <use xlink:href=\"#icon-CloseSquare\"></use>\n                            </svg>\n                        </div>\n                    </div>\n                </li>\n        ")).insertBefore($lastLi);
+    $li.on('click', function () {
+      window.open(node.url);
+    });
+    $li.on('click', '.close', function (e) {
+      e.stopPropagation(); //阻止冒泡
+
+      hashMap.splice(index, 1); //删掉
+
+      render(); //重新渲染，即删完需要重新渲染
+    });
   });
 };
 
@@ -159,7 +166,6 @@ $('.addButton').on('click', function () {
 
   hashMap.push({
     logo: simplifyUrl(url)[0].toUpperCase(),
-    logoType: 'text',
     url: url
   });
   $siteList.find('li:not(.last)').remove();
@@ -167,8 +173,7 @@ $('.addButton').on('click', function () {
 }); //关闭页面的时候把当前的hashMap存到x里面
 
 window.onbeforeunload = function () {
-  console.log("\u9875\u9762\u8981\u5173\u95ED\u4E86"); //把对象变成字符串用JSON.stringfy()
-
+  //把对象变成字符串用JSON.stringfy()
   var string = JSON.stringify(hashMap);
   /*查看下面四个值要勾选preserve log*/
   // console.log(hashMap)
@@ -208,7 +213,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53904" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53955" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

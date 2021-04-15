@@ -3,12 +3,10 @@ const $lastLi = $siteList.find('li.last')
 //一进入当前页面的时候获取x值，
 const x = localStorage.getItem('x')
 const xObject = JSON.parse(x) //JSON.parse把字符串x变成对象xObject
-console.log('x:' + x)
-console.log('xObject:' + xObject)
 //初始化的时候，x有值的时候，xObject是空，所以用 ||来获取后面的数组值
 const hashMap = xObject || [//声明一个全局变量
-    {logo:'A',logoType:'text',url:'https://www.acfun.cn'},
-    {logo:'B',logoType:'image',url:'https://bilibili.com'},
+    {logo:'A',url:'https://www.acfun.cn'},
+    {logo:'B',url:'https://bilibili.com'},
 ]
 
 const simplifyUrl = (url) =>{
@@ -19,17 +17,31 @@ const simplifyUrl = (url) =>{
 }
 
 const render = () => {
-    hashMap.forEach(node=>{
+    $siteList.find('li:not(.last)').remove()
+    hashMap.forEach((node,index)=>{
         const $li = $(`
                 <li>
-                    <a href="${node.url}" >
-                        <div class="site">
-                            <div class="logo">${simplifyUrl(node.url)[0].toUpperCase()}</div>
-                            <div class="link">${simplifyUrl(node.url)}</div>
+                    <div class="site">
+                        <div class="logo">${node.logo}</div>
+                        <div class="link">${simplifyUrl(node.url)}</div>
+                        <div class="close">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-CloseSquare"></use>
+                            </svg>
                         </div>
-                    </a>
+                    </div>
                 </li>
         `).insertBefore($lastLi)
+
+        $li.on('click',()=>{
+            window.open(node.url)
+        })
+
+        $li.on('click','.close',(e)=>{
+            e.stopPropagation()//阻止冒泡
+            hashMap.splice(index,1)//删掉
+            render()//重新渲染，即删完需要重新渲染
+        })
     })
 }
 
@@ -43,7 +55,6 @@ $('.addButton').on('click',()=>{
     }
     hashMap.push({
         logo:simplifyUrl(url)[0].toUpperCase(),
-        logoType:'text',
         url:url
     })
     $siteList.find('li:not(.last)').remove()
@@ -52,7 +63,6 @@ $('.addButton').on('click',()=>{
 
 //关闭页面的时候把当前的hashMap存到x里面
 window.onbeforeunload = () =>{
-    console.log(`页面要关闭了`)
     //把对象变成字符串用JSON.stringfy()
     const string = JSON.stringify(hashMap)
     /*查看下面四个值要勾选preserve log*/
